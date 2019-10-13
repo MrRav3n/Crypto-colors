@@ -6,10 +6,8 @@ require('chai')
 
 contract('CryptoColors', ([deployer, account1, account2]) => {
     let token;
-    let contract
     before(async() => {
         token = await CryptoColors.deployed();
-        contract = await CryptoColors.deployed();
     })
     describe('should be initialized', async() => {
         it('has basic data', async() => {
@@ -63,5 +61,56 @@ contract('CryptoColors', ([deployer, account1, account2]) => {
             await token.transferFrom(account2, account1, 100, {from: account2}).should.be.rejected
         })
     })
+    describe('CryptoColors tests', async () => {
 
+        it('should add colors', async() => {
+            let balanceAccount1 = await token.balanceOf(account1) //200
+            let balanceAccount2 = await token.balanceOf(account2) //0
+            await token.addColor("", 200, {from: deployer}).should.be.rejected
+            await token.addColor("Brown", 0, {from: deployer}).should.be.rejected
+            await token.addColor("Brown", 200, {from: account1}).should.be.rejected
+            await token.addColor("Red", 200, {from: deployer})
+            await token.addColor("Brown", 200, {from: deployer}).should.be.rejected
+            assert.equal(await token.colorsCount(), 1);
+            const result1=await token.colors.call(0)
+            assert.equal(result1[0], deployer)
+            assert.equal(result1[1], 200)
+            assert.equal(result1[2], "Red")
+            assert.equal(result1[3], false)
+        })
+        it('should buy colors', async () => {
+            await token.buyColor(0, {from: account2}).should.be.rejected
+            await token.buyColor(1, {from: account1}).should.be.rejected
+            await token.buyColor(0, {from: account1})
+            const result1=await token.colors.call(0)
+            assert.equal(result1[0], account1)
+            assert.equal(result1[1], 200)
+            assert.equal(result1[2], "Red")
+            assert.equal(result1[3], true)
+            let balanceAccount1 = await token.balanceOf(account1)
+            let balanceDeployer = await token.balanceOf(deployer)
+            assert.equal(balanceDeployer, 1000000000000000000);
+            assert.equal(balanceAccount1.toString(), "0");
+            const result2=await token.people.call(account1)
+            assert.equal(result2, 1)
+        })
+        it('should sell products', async() => {
+            await token.sellColor(1, 150, {from: account1})
+            const result1=await token.colors.call(1)
+            assert.equal(result1[0], account1)
+            assert.equal(result1[1], 150)
+            assert.equal(result1[2], "Red")
+            assert.equal(result1[3], false)
+            await token.buyColor(1, {from: deployer})
+            const result2=await token.colors.call(1)
+            assert.equal(result2[0], deployer)
+            assert.equal(result2[1], 150)
+            assert.equal(result2[2], "Red")
+            assert.equal(result2[3], true)
+            let balanceAccount1 = await token.balanceOf(account1)
+            let balanceDeployer = await token.balanceOf(deployer)
+            assert.equal(balanceDeployer, 1000000000000000000-150);
+            assert.equal(balanceAccount1.toString(), "150");
+        })
+    })
 })

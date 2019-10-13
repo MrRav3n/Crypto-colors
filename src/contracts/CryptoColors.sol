@@ -6,6 +6,7 @@ pragma solidity ^0.5.8;
     uint public colorsCount;
     //List of added but not bought colors
     struct FreeColors{
+        address owner;
         uint price;
         string color;
         bool bought;
@@ -15,15 +16,18 @@ pragma solidity ^0.5.8;
     //Someone who wants to collect our colors
     struct Person {
         uint howMuch;
-        string[] colors;
+         mapping(uint => string) colors;
     }
     mapping(address => Person) public people;
     //Function that allows main person to add new color to website (it can be done once a day)
     function addColor(string memory _color, uint _price) public {
-       require(block.timestamp>=time);
-       require(msg.sender == mainPerson);
+        require(bytes(_color).length>0);
+        require(_price>0);
+        require(block.timestamp>=time);
+        require(msg.sender == mainPerson);
        colors[colorsCount].price = _price;
        colors[colorsCount].color = _color;
+       colors[colorsCount].owner = msg.sender;
        colorsCount++;
        time += 86400;
     }
@@ -31,15 +35,21 @@ pragma solidity ^0.5.8;
         require(bytes(people[msg.sender].colors[_id]).length>0);
         colors[colorsCount].price = _price;
         colors[colorsCount].color = people[msg.sender].colors[_id];
-        delete people[msg.sender].colors[_id];
+        colors[colorsCount].owner = msg.sender;
+        colorsCount++;
+        people[msg.sender].colors[_id] = "";
     }
     function buyColor(uint _id) public {
+        require(_id<colorsCount);
         require(!colors[_id].bought);
         require(balances[msg.sender]>=colors[_id].price);
-        people[msg.sender].colors.push(colors[_id].color);
+        transfer(colors[_id].owner, colors[_id].price);
         people[msg.sender].howMuch++;
+        people[msg.sender].colors[people[msg.sender].howMuch]=colors[_id].color;
+
         colors[_id].bought = true;
-        balances[msg.sender] -=colors[_id].price;
+        colors[_id].owner = msg.sender;
+
     }
     //How much time left to new color add
     function getTime() public view returns(uint) {
