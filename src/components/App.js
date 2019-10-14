@@ -3,6 +3,12 @@ import Navbar from "./Navbar"
 import './App.css';
 import Web3 from 'web3'
 import Main from './Main'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 class App extends Component {
 
     async componentWillMount() {
@@ -39,14 +45,50 @@ class App extends Component {
         }
     }
 
-  render() {
+    render() {
+      return (
+          <Router>
+              <div className="mainDiv">
+                  <Navbar account={this.state.account} />
+                  <Switch>
+                      <Route exact path="/YourTokens" component={YourTokens} />
+                      <Route exact path="/YourColors" component={YourColors} />
+                      <Route path="/" component={MyDefaultComponent} />
+                  </Switch>
+                  </div>
+          </Router>
+      );
+    }
+  }
+  function YourTokens() {
     return (
       <div>
-      <Navbar account={this.state.account} />
-
+        <h2>Home</h2>
       </div>
     );
   }
-}
 
+  function YourColors() {
+    return (
+      <div>
+        <h2>About</h2>
+      </div>
+    );
+  }
+
+  function MyDefaultComponent() {
+    return (
+  <>
+      <div className="d-flex halfDivided align-items-stretch ">
+      <Link to="/YourTokens" className=" col-md-6 d-flex justify-content-center align-items-center">
+            <h1 className="display-md-2 display-3 a text-center">Your Tokens</h1>
+      </Link>
+
+        <Link to="/YourColors" className=" col-md-6 d-flex justify-content-center align-items-center">
+            <h1 className="display-md-2 display-3 a text-center">Your Colors</h1>
+         </Link>
+      </div>
+  </>
+    );
+  }
 export default App;
