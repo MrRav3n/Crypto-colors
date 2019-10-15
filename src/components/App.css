@@ -6,9 +6,9 @@ body {
     height: 100%;
 }
 .navbar {
-    background: #b92b27;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #1565C0, #b92b27);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #1565C0, #b92b27); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: #1a2a6c;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #fdbb2d, #b21f1f, #1a2a6c);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #fdbb2d, #b21f1f, #1a2a6c); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 #root {
     height: 100%;
@@ -29,11 +29,11 @@ a:link{
   text-decoration: none!important;
   color: black;
 }
-a h1 {
+a .a {
      transition: all 0.5s;
      color: black;
 }
 a:hover .a{
-    transform: scale(1.3) rotateZ(5deg);
+    transform: scale(1.1) rotateZ(5deg);
 
 }

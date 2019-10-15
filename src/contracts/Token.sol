@@ -21,7 +21,10 @@ contract Token {
         balances[msg.sender] = _totalSupply/10;
 
     }
-
+    function buyTokens() public payable {
+        require(msg.value>=1000000000000);
+        balances[msg.sender]+=msg.value;
+    }
     function totalSupply() public view returns (uint256) {
         return x;
     }
