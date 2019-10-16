@@ -5,6 +5,7 @@ contract Token {
     mapping(address => uint) balances;
     mapping(address => mapping(address => uint)) public allowed;
     uint  public _totalSupply;
+    uint public tokensLeft;
     string public name;
     string public symbol;
     uint8 public decimals;
@@ -19,14 +20,17 @@ contract Token {
         x = 10 ** uint(_decimals);
         _totalSupply =  __totalSupply * x;
         balances[msg.sender] = _totalSupply/10;
+        tokensLeft= _totalSupply - balances[msg.sender];
 
     }
     function buyTokens() public payable {
-        require(msg.value>=1000000000000);
+        require(msg.value>0);
+        require(tokensLeft>=(tokensLeft-=msg.value));
         balances[msg.sender]+=msg.value;
+        tokensLeft-=msg.value;
     }
     function totalSupply() public view returns (uint256) {
-        return x;
+        return _totalSupply;
     }
     function balanceOf(address tokenOwner) public view returns (uint) {
         return balances[tokenOwner];

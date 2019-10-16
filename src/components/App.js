@@ -5,6 +5,7 @@ import Web3 from 'web3'
 import Main from './YourTokens'
 import YourTokens from './YourTokens'
 import CryptoColors from '../abis/CryptoColors'
+import { Spinner } from 'react-bootstrap';
 import {
   BrowserRouter as Router,
   Switch,
@@ -37,12 +38,16 @@ class App extends Component {
         account = account[0];
         let accountShort = account.substring(0,6);
         let balance = await this.state.contract.methods.balanceOf(account).call();
-        balance = balance /1000000000000000000;
+        let supply = await this.state.contract.methods.totalSupply().call()
+        balance = balance / 1000000000000000000;
+
         this.setState({account: account,
         accountShort: accountShort,
-            balance: balance.toString()
+            balance: balance,
+            loading: false
         });
-        console.log(balance);
+
+
     }
     async loadContract() {
         const networkId = await window.web3.eth.net.getId();
@@ -50,22 +55,60 @@ class App extends Component {
         if(networkData) {
             const contract = await window.web3.eth.Contract(CryptoColors.abi, networkData.address);
             this.setState({contract});
-            console.log(contract)
+
         } else {
-            console.log('Connect to network')
+            alert('Connect to another network')
         }
     }
-    async BuyTokens(ammout) {
-        await this.state.contract.methods.buyTokens().send({from: this.state.account, value: ammout})
-            .once('receipt', (receipt) => {
-            console.log("123");
-        })
+    async buyTokens(amout) {
+        await this.state.contract.methods.buyTokens().send({from: this.state.account, value: amout}, (error, result) => {
+            if(result!=null){
+                this.checkBlockNumber();
+            }
+        });
+    }
+    async transfer(address,amout) {
+        await this.state.contract.methods.transfer(address,amout).send({from: this.state.account}, (error, result) => {
+            if(result!=null){
+                this.checkBlockNumber();
+            }
+        });
+    }
+    async transferFrom(addressFrom, addressTo, amout) {
+        await this.state.contract.methods.transferFrom(addressFrom, addressTo, amout).send({from: this.state.account}, (error, result) => {
+            if(result!=null){
+                this.checkBlockNumber();
+            }
+        });
+    }
+    async approve(address,ammout) {
+        await this.state.contract.methods.approve(address,ammout).send({from: this.state.account}, (error, result) => {
+            if(result!=null){
+                this.checkBlockNumber();
+            }
+        });
+    }
+
+    async checkBlockNumber() {
+        this.setState({loading:true});
+        const sleep = (milliseconds) => {
+            return new Promise(resolve => setTimeout(resolve, milliseconds))
+        };
+        const blockNumber = await window.web3.eth.getBlockNumber();
+        let blockNumberNew = await window.web3.eth.getBlockNumber();
+        while(blockNumber === blockNumberNew) {
+            blockNumberNew = await window.web3.eth.getBlockNumber();
+            await sleep(100);
+        }
+        await this.loadAccount();
+        this.setState({loading:false});
     }
 
     constructor(props) {
         super(props);
         this.state = {
             account: null,
+            loading: true
         }
     }
 
@@ -74,13 +117,43 @@ class App extends Component {
           <Router>
               <div className="mainDiv">
                   <Navbar account={this.state.account} />
-                  <Switch>
-                      <Route exact path="/YourTokens">
-                          <YourTokens balance={this.state.balance} account={this.state.accountShort} buyTokens={this.BuyTokens.bind(this)} />
-                      </Route>
-                      <Route exact path="/YourColors" component={YourColors} />
-                      <Route path="/" component={MyDefaultComponent} />
-                  </Switch>
+                  {this.state.loading
+                      ? <div className="d-flex halfDivided align-items-stretch ">
+                          <>
+                          <div className="container mt-5">
+                              <h1 className="text-center display-1 mb-3">Loading...</h1>
+                              <div className="row justify-content-between">
+                          <div className="spinner-grow text-primary" role="status">
+                              <span className="sr-only">Loading...</span>
+                          </div>
+                          <div className="spinner-grow text-success" role="status">
+                              <span className="sr-only">Loading...</span>
+                          </div>
+                          <div className="spinner-grow text-danger" role="status">
+                              <span className="sr-only">Loading...</span>
+                          </div>
+                          <div className="spinner-grow text-warning" role="status">
+                              <span className="sr-only">Loading...</span>
+                          </div>
+                          <div className="spinner-grow text-info" role="status">
+                              <span className="sr-only">Loading...</span>
+                          </div>
+                          </div>
+                          </div>
+                      </></div>
+                  : <Switch>
+                          <Route exact path="/YourTokens">
+                              <YourTokens balance={this.state.balance}
+                                          account={this.state.accountShort}
+                                          buyTokens={this.buyTokens.bind(this)}
+                                          transfer={this.transfer.bind(this)}
+                                          transferFrom={this.transferFrom.bind(this)}
+                                          approve={this. approve.bind(this)}/>
+                          </Route>
+                          <Route exact path="/YourColors" component={YourColors} />
+                          <Route path="/" component={MyDefaultComponent} />
+                      </Switch>}
+
                   </div>
           </Router>
       );
@@ -102,14 +175,25 @@ class App extends Component {
   function MyDefaultComponent() {
     return (
   <>
-      <div className="d-flex halfDivided align-items-stretch ">
-      <Link to="/YourTokens" className="col d-flex justify-content-center align-items-center aClass">
-            <h1 className="display-md-2 display-3 a text-center">Your Tokens</h1>
-      </Link>
-
-        <Link to="/YourColors" className="col d-flex justify-content-center align-items-center aClass">
-            <h1 className="display-md-2 display-3 a text-center">Your Colors</h1>
-         </Link>
+      <div className="halfDivided align-items-stretch m-0">
+          <h1 className="display-3 a text-center pt-5 pb-5 text-white">Website about collecting</h1>
+          <div className="d-none d-md-flex align-items-stretch pt-5 mt-5">
+              <div className="col-1"></div>
+            <Link to="/YourTokens" className="col-5 d-flex justify-content-around align-items-around aClass">
+              <h1 className=" display-1 a text-center  font-weight-bold mt-5">Your Tokens</h1>
+            </Link>
+            <Link to="/YourColors" className="col-5 d-flex justify-content-center align-items-center aClass">
+                <h1 className=" display-1 a text-center font-weight-bold mt-5">Your Colors</h1>
+            </Link>
+          </div>
+          <div className=" d-md-none align-items-stretch pt-5 mt-5">
+              <Link to="/YourTokens" className=" col-12 d-flex justify-content-center align-items-center aClass mb-3">
+                  <h1 className=" display-3 a text-center  font-weight-bold">Your Tokens</h1>
+              </Link>
+              <Link to="/YourColors" className=" col-12 d-flex justify-content-center align-items-center aClass">
+                  <h1 className=" display-3 a text-center font-weight-bold m-2">Your Colors</h1>
+              </Link>
+          </div>
       </div>
   </>
     );
