@@ -4,6 +4,7 @@ import './App.css';
 import Web3 from 'web3'
 import Main from './YourTokens'
 import YourTokens from './YourTokens'
+import YourColors from './YourColors'
 import CryptoColors from '../abis/CryptoColors'
 import { Spinner } from 'react-bootstrap';
 import {
@@ -34,18 +35,57 @@ class App extends Component {
         }
     }
     async loadAccount() {
+
         let account = await window.web3.eth.getAccounts();
         account = account[0];
         let accountShort = account.substring(0,6);
         let balance = await this.state.contract.methods.balanceOf(account).call();
         let supply = await this.state.contract.methods.totalSupply().call()
         balance = balance / 1000000000000000000;
+        let mainAccount = await this.state.contract.methods.mainPerson().call();
+        let colorsCount = await this.state.contract.methods.colorsCount().call()
+        let getTime = await this.state.contract.methods.getTime().call()
+        if(getTime<1000000000000000) {
+            getTime = getTime.toNumber()
+            let hours = Math.floor(getTime/3600)
+            let minutes = Math.floor((getTime-(hours*3600))/60)
+            let secounds = getTime-(hours*3600)-(minutes*60);
+            let time = hours + ':' + minutes + ':' + secounds;
+            this.setState({time});
+        }
 
+
+
+        if(mainAccount === account) {
+            this.setState({mainAccount: true})
+        } else {
+            this.setState({mainAccount: false})
+        }
         this.setState({account: account,
         accountShort: accountShort,
             balance: balance,
-            loading: false
+            loading: false,
+            colorsCount: colorsCount,
+            colors: [],
+            person: [],
+            numberTest: 0
+
         });
+        for(var i=0; i<colorsCount; i++) {
+            let item = await this.state.contract.methods.colors(i).call();
+            if(item.bought){
+                this.setState({colors : [...this.state.colors, item]})
+            }
+        }
+        console.log(this.state.colors)
+
+
+        for(var i=0; i<colorsCount; i++) {
+            let person = await this.state.contract.methods.people(this.state.account, this.state.numberTest).call();
+            this.setState({numberTest: this.state.numberTest+1})
+                this.setState({person : [...this.state.person, person.toNumber()]})
+        }
+        console.log(this.state.person)
 
 
     }
@@ -88,6 +128,27 @@ class App extends Component {
             }
         });
     }
+    async addColor(color,price) {
+        await this.state.contract.methods.addColor(color,price).send({from: this.state.account}, (error, result) => {
+            if(result!=null){
+                this.checkBlockNumber();
+            }
+        });
+    }
+    async sellColor(id,price) {
+        await this.state.contract.methods.sellColor(id,price).send({from: this.state.account}, (error, result) => {
+            if(result!=null){
+                this.checkBlockNumber();
+            }
+        });
+    }
+    async buyColor(id) {
+        await this.state.contract.methods.buyColor(id).send({from: this.state.account}, (error, result) => {
+            if(result!=null){
+                this.checkBlockNumber();
+            }
+        });
+    }
 
     async checkBlockNumber() {
         this.setState({loading:true});
@@ -103,6 +164,7 @@ class App extends Component {
         await this.loadAccount();
         this.setState({loading:false});
     }
+
 
     constructor(props) {
         super(props);
@@ -150,7 +212,17 @@ class App extends Component {
                                           transferFrom={this.transferFrom.bind(this)}
                                           approve={this. approve.bind(this)}/>
                           </Route>
-                          <Route exact path="/YourColors" component={YourColors} />
+                          <Route exact path="/YourColors" >
+                          <YourColors  account={this.state.accountShort}
+                                       mainAccount={this.state.mainAccount}
+                                       balance={this.state.balance}
+                                       addColor={this.addColor.bind(this)}
+                                       time={this.state.time}
+                                       colors={this.state.colors}
+                                       buyColor={this.buyColor.bind(this)}
+                                       sellColor={this.sellColor.bind(this)}
+                          />
+                          </Route>
                           <Route path="/" component={MyDefaultComponent} />
                       </Switch>}
 
@@ -161,16 +233,7 @@ class App extends Component {
   }
 
 
-  class YourColors extends React.Component {
-    render() {
-    return (
-      <div>
-        <h2>About</h2>
-      </div>
-    );
 
-    }
-  }
 
   function MyDefaultComponent() {
     return (

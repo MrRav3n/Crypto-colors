@@ -78,7 +78,7 @@ class TransferTokens extends React.Component {
         return(
             <div className="jumbotron container">
                 <h1 className="display-4 text-center font-weight-bolder">Transfer tokens from your account</h1>
-                <p className="lead font-weight-bolder text-center">Now you are able to transfer some tokens to someone else </p>
+                <p className="lead font-weight-bolder text-center">Now you are able to transfer some tokens to someone else. </p>
                 <hr className="my-4"/>
                 <form className="form-inline row justify-content-center p-2 rounded" onSubmit={(e) => {
                     e.preventDefault();
