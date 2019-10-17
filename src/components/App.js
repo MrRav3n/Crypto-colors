@@ -45,6 +45,7 @@ class App extends Component {
         let mainAccount = await this.state.contract.methods.mainPerson().call();
         let colorsCount = await this.state.contract.methods.colorsCount().call()
         let getTime = await this.state.contract.methods.getTime().call()
+
         if(getTime<1000000000000000) {
             getTime = getTime.toNumber()
             let hours = Math.floor(getTime/3600)
@@ -68,24 +69,40 @@ class App extends Component {
             colorsCount: colorsCount,
             colors: [],
             person: [],
-            numberTest: 0
+            numberTest: 0,
+            personColors: []
 
         });
-        for(var i=0; i<colorsCount; i++) {
+        let peopleItemsCount=await this.state.contract.methods.peopleItemsCount(this.state.account).call();
+        peopleItemsCount=peopleItemsCount.toNumber();
+
+
+        for(let i=1; i<=this.state.colorsCount; i++) {
             let item = await this.state.contract.methods.colors(i).call();
-            if(item.bought){
                 this.setState({colors : [...this.state.colors, item]})
+
+        }
+
+
+
+        for(let z=0; z<peopleItemsCount;z++) {
+
+            let person = await this.state.contract.methods.people(this.state.account, z).call();
+            person = person.toNumber()
+            console.log(person)
+            console.log(this.state.colors[2])
+            if(person!=0) {
+                if(this.state.colors[person-1].owner===this.state.account) {
+                    this.setState({ personColors : [...this.state.personColors, this.state.colors[person-1]]})
+                    console.log(this.state.colors[person-1].color)
+                }
             }
-        }
-        console.log(this.state.colors)
 
 
-        for(var i=0; i<colorsCount; i++) {
-            let person = await this.state.contract.methods.people(this.state.account, this.state.numberTest).call();
-            this.setState({numberTest: this.state.numberTest+1})
-                this.setState({person : [...this.state.person, person.toNumber()]})
+
         }
-        console.log(this.state.person)
+        console.log(this.state.personColors);
+
 
 
     }
@@ -221,6 +238,8 @@ class App extends Component {
                                        colors={this.state.colors}
                                        buyColor={this.buyColor.bind(this)}
                                        sellColor={this.sellColor.bind(this)}
+                                       personColors={this.state.personColors}
+                                       numberItems={this.state.numberTest}
                           />
                           </Route>
                           <Route path="/" component={MyDefaultComponent} />

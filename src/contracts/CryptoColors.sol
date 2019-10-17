@@ -11,6 +11,7 @@ contract CryptoColors is Token{
         string color;
         bool bought;
     }
+    mapping(address => uint) public peopleItemsCount;
     mapping(uint => FreeColors) public colors;
     address payable public mainPerson;  //contract deployer
     //Someone who wants to collect our colors
@@ -27,7 +28,6 @@ contract CryptoColors is Token{
         colors[colorsCount].color = _color;
         colors[colorsCount].owner = msg.sender;
 
-        time += 15;
     }
     function sellColor(uint _id, uint _price) public {
         require(colors[people[msg.sender][_id]].owner == msg.sender);
@@ -36,6 +36,7 @@ contract CryptoColors is Token{
         delete people[msg.sender][_id];
     }
     function buyColor(uint _id) public {
+
         require(_id<=colorsCount && _id>0);
         require(!colors[_id].bought);
         require(balances[msg.sender]>=colors[_id].price);
@@ -43,6 +44,7 @@ contract CryptoColors is Token{
         people[msg.sender].push(_id);
         colors[_id].bought = true;
         colors[_id].owner = msg.sender;
+        peopleItemsCount[msg.sender]++;
     }
     //How much time left to new color add
     function getTime() public view returns(uint) {
@@ -57,5 +59,7 @@ contract CryptoColors is Token{
         mainPerson=msg.sender;
         addColor("Red", 100);
         buyColor(1);
+        addColor("Blue", 100);
+        buyColor(2);
     }
 }

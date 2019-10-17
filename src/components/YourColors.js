@@ -45,7 +45,9 @@ class YourTokens extends React.Component {
                             />
                         </Route>
                         <Route exact path="/SellColors">
-                            <SellColors sellColor={this.props.sellColor}/>
+                            <SellColors sellColor={this.props.sellColor}
+                                        personColors={this.props.personColors}
+                            />
                         </Route>
                        <Route exact path="/AddColor">
                                 <AddColor addColor={this.props.addColor}/>
@@ -78,7 +80,6 @@ class BuyColors extends React.Component {
                     const styleObj = {
                         background: item.color,
                     };
-
                         let price = item.price / 1000000000000000000;
                         price = price.toString()
                     return (
@@ -86,7 +87,7 @@ class BuyColors extends React.Component {
                         {item.bought
                         ? <p />
                         :<div key={i} className="rounded-circle row w-100 color  align-items-center justify-content-center" style={styleObj} onClick={(e) => {
-                        this.props.buyColor(i)
+                        this.props.buyColor(i+1)
                          }}><h1>{price} STE</h1></div>}
                         </div>
                     );
@@ -102,18 +103,33 @@ class SellColors extends React.Component {
         return(
             <div className="jumbotron container">
                 <h1 className="display-4 text-center font-weight-bolder">Sell Your Colors</h1>
-                <p className="lead font-weight-bolder text-center">Now you are able to sell tokens that you own.</p>
+                <p className="lead font-weight-bolder text-center">Now you are able to sell colors that you own.</p>
+                <p className="lead font-weight-bolder text-center"><span className="text-danger display-3">Type below the price and then click on item you want to sell.</span></p>
                 <hr className="my-4"/>
-                <form className="form-inline row justify-content-center p-2 rounded" onSubmit={(e) => {
-                    e.preventDefault();
-                    let value = this.tokens.value*1000000000000000000;
-                    value = value.toString();
-                    this.props.transfer(this.address.value, value);
-                }}>
-                    <input type="text" ref={(input) => this.address = input} className="form-control col-12 col-sm-5 mr-sm-3 mb-2 mb-sm-0" placeholder="Address to" />
-                    <input type="text" ref={(input) => this.tokens = input} className="form-control col-12 col-sm-3 mb-2 mb-sm-0" placeholder="Tokens amout" />
-                    <button type="submit" className="btn btn-primary ml-3 ">Send tokens</button>
-                </form>
+                <div className="form-inline row justify-content-center p-2 rounded">
+                    <input type="text" ref={(input) => this.price = input} className="form-control col-12 col-sm-5 mr-sm-3 mb-2 mb-sm-0" placeholder="Price" />
+                </div>
+                <div className="row mt-3">
+                {this.props.personColors.map((item, i) => {
+                    const styleObj = {
+                        background: item.color,
+                    };
+                    let price = item.price / 1000000000000000000;
+
+                    price = price.toString()
+                    return (
+                        <div className="col-3  mt-5">
+
+                                <div key={i} className="rounded-circle row w-100 color  align-items-center justify-content-center" style={styleObj} onClick={(e) => {
+                                    let priceToSell = this.price.value*1000000000000000000;
+                                    priceToSell = priceToSell.toString()
+                                    console.log(priceToSell);
+                                    this.props.sellColor(i, priceToSell)
+                                }}><h1>{price} STE</h1></div>
+                        </div>
+                    );
+                })}
+                </div>
             </div>
         );
     }
