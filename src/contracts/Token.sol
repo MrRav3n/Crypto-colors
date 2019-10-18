@@ -1,18 +1,17 @@
 pragma solidity ^0.5.8;
 
 contract Token {
-
     mapping(address => uint) balances;
     mapping(address => mapping(address => uint)) public allowed;
-    uint  public _totalSupply;
-    uint public tokensLeft;
-    string public name;
-    string public symbol;
-    uint8 public decimals;
+    uint  public _totalSupply; //total supply of the token
+    uint public tokensLeft; //Tokens left
+    string public name; //Name of the token
+    string public symbol; //Symbol of the token
+    uint8 public decimals; //Token decimals
     uint x;
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
-
+    //Typical ERC-20 constructor
     constructor(string memory _name, string memory _symbol, uint8 _decimals, uint __totalSupply) public {
         name = _name;
         symbol = _symbol;
@@ -23,12 +22,15 @@ contract Token {
         tokensLeft= _totalSupply - balances[msg.sender];
 
     }
+    //Function that allows us to buy tokens for ethereum
     function buyTokens() public payable {
         require(msg.value>0);
         require(tokensLeft>=(tokensLeft-=msg.value));
         balances[msg.sender]+=msg.value;
         tokensLeft-=msg.value;
     }
+
+    //Typical ERC-20 Token standard functions (BELOW)
     function totalSupply() public view returns (uint256) {
         return _totalSupply;
     }
@@ -59,5 +61,4 @@ contract Token {
         emit Transfer(from, to, tokens);
         return true;
     }
-
 }
