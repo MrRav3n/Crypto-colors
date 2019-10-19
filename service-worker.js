@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/Crypto-Colors/precache-manifest.96709d00c4762d121cd1986f2c93aec9.js"
+  "/Crypto-colors/precache-manifest.29b6661ff7863e9a06ab2df62d3d6973.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/Crypto-Colors/index.html", {
+workbox.routing.registerNavigationRoute("/Crypto-colors/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });
