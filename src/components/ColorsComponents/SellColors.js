@@ -14,29 +14,25 @@ class SellColors extends React.Component {
                 <div className="row mt-3">
                     {this.props.personColors.map((item, i) => {
 
-                        if(this.props.person[i] != 999) {
-                       if(this.props.colors[this.props.person[i]].owner===this.props.accountLong && item.bought === true ) {
-                           const styleObj = {
-                               background: item.color,
-                           };
-                           let price = item.price / 1000000000000000000;
-
-                           price = price.toString()
-
-                           let person = this.props.person[i].toString()
-
-                           return (
-                               <div key={i} className="col-lg-4 col-md-6 col-12 rounded color mb-3">
-
-                                   <div className="rounded row m-1 color  align-items-stretch justify-content-center" style={styleObj} onClick={(e) => {
-
-                                       let priceToSell = this.price.value*1000000000000000000;
-                                       priceToSell = priceToSell.toString()
-                                       this.props.sellColor(i, priceToSell)
-                                   }}><h1 className="text-center">{price} STE</h1></div>
-                               </div>
-                           );
-                       }
+                        if(this.props.person[i] !== 999) {
+                            if(this.props.colors[this.props.person[i]].owner===this.props.accountLong && item.bought === true ) {
+                               const styleObj = {
+                                   background: item.color,
+                               };
+                               let price = item.price / 1000000000000000000;
+                               price = price.toString()
+                               return (
+                                   <div key={i} className="col-lg-4 col-md-6 col-12 rounded color mb-3">
+                                       <div className="rounded row m-1 color  align-items-stretch justify-content-center" style={styleObj} onClick={(e) => {
+                                            let priceToSell = this.price.value*1000000000000000000;
+                                            priceToSell = priceToSell.toString()
+                                            this.props.sellColor(i, priceToSell)
+                                       }}>
+                                           <h1 className="text-center">{price} STE</h1>
+                                       </div>
+                                   </div>
+                               );
+                            }
                         }
                     })}
                 </div>

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Decentralized website with react about collecting colors, transfering permisions, buying them etc.",
   "author": "MrRav3n",
-  "homepage": "https://MrRav3n.github.io/Crypto-Colors",
+  "homepage": "https://MrRav3n.github.io/Crypto-colors",
   "dependencies": {
     "babel-polyfill": "6.26.0",
     "babel-preset-env": "1.7.0",

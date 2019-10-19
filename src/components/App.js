@@ -6,7 +6,7 @@ import YourTokens from './YourTokens'
 import YourColors from './YourColors'
 import CryptoColors from '../abis/CryptoColors'
 import Loading from "./Loading";
-import { Spinner } from 'react-bootstrap';
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -43,7 +43,7 @@ class App extends Component {
         account = account[0];
         let accountShort = account.substring(0,6);
         let balance = await this.state.contract.methods.balanceOf(account).call();
-        let supply = await this.state.contract.methods.totalSupply().call()
+        let supply = await this.state.contract.methods.tokensLeft().call()
         balance = balance / 1000000000000000000;
         let mainAccount = await this.state.contract.methods.mainPerson().call();
         let colorsCount = await this.state.contract.methods.colorsCount().call()
@@ -65,11 +65,10 @@ class App extends Component {
                 minutes = '0'+minutes;
             }
             let time = hours + ':' + minutes + ':' + secounds;
-            console.log(getTime)
+
             this.setState({time});
         } else {
             let time = 'New color can be added';
-            console.log(getTime)
             this.setState({time});
         }
         //Checking if deployer of the contract is currently connected
@@ -78,8 +77,11 @@ class App extends Component {
         } else {
             this.setState({mainAccount: false})
         }
-        this.setState({account: account,
-        accountShort: accountShort,
+        supply = supply/1000000000000000000;
+        supply = supply.toString();
+        this.setState({
+            account: account,
+            accountShort: accountShort,
             balance: balance,
             loading: false,
             colorsCount: colorsCount,
@@ -87,8 +89,9 @@ class App extends Component {
             person: [],
             numberTest: 0,
             personColors: [],
-
+            supply: supply
         });
+
         let peopleItemsCount=await this.state.contract.methods.peopleItemsCount(this.state.account).call();
         peopleItemsCount=peopleItemsCount.toNumber();
         this.setState({peopleItemsCount});
@@ -208,7 +211,8 @@ class App extends Component {
                                           buyTokens={this.buyTokens.bind(this)}
                                           transfer={this.transfer.bind(this)}
                                           transferFrom={this.transferFrom.bind(this)}
-                                          approve={this. approve.bind(this)}
+                                          approve={this.approve.bind(this)}
+                                          supply={this.state.supply}
                               />
                           </Route>
                           <Route exact path="/YourColors" >
