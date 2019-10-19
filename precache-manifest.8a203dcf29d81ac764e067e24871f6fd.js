@@ -4,15 +4,15 @@ self.__precacheManifest = [
     "url": "/Crypto-colors/static/js/runtime~main.b3993e91.js"
   },
   {
-    "revision": "6d78798fd58b050b0e5c",
-    "url": "/Crypto-colors/static/js/main.6d78798f.chunk.js"
+    "revision": "17ddfcf755e9029d3682",
+    "url": "/Crypto-colors/static/js/main.17ddfcf7.chunk.js"
   },
   {
     "revision": "04f493a3e050b79ff595",
     "url": "/Crypto-colors/static/js/1.04f493a3.chunk.js"
   },
   {
-    "revision": "6d78798fd58b050b0e5c",
+    "revision": "17ddfcf755e9029d3682",
     "url": "/Crypto-colors/static/css/main.e662fedd.chunk.css"
   },
   {
@@ -20,7 +20,7 @@ self.__precacheManifest = [
     "url": "/Crypto-colors/static/css/1.baff7280.chunk.css"
   },
   {
-    "revision": "de69976eb77802574a4cc3b958e8e4fd",
+    "revision": "80374744a357297058f176afc06bb415",
     "url": "/Crypto-colors/index.html"
   }
 ];
