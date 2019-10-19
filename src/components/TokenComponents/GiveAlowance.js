@@ -1,5 +1,5 @@
 import React from 'react'
-
+//Giving alowance to someone to use our wallet (local tokens wallet)
 class GiveAlowance extends React.Component {
     render() {
         return(
@@ -23,4 +23,5 @@ class GiveAlowance extends React.Component {
         );
     }
 }
+
 export default GiveAlowance

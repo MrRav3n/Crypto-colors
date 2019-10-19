@@ -1,5 +1,5 @@
 import React from 'react'
-
+//Buing tokens for REAL ethereum
 class BuyTokens extends React.Component {
     render() {
         return(
@@ -19,4 +19,5 @@ class BuyTokens extends React.Component {
         );
     }
 }
+
 export default BuyTokens

@@ -19,7 +19,6 @@ contract CryptoColors is Token{
     mapping(address => uint[]) public people;
     //Function that allows main person to add new color to website (it can be done once a specified amount of time)
     function addColor(string memory _color, uint _price) public {
-
         require(bytes(_color).length>0);
         require(_price>0);
         require(block.timestamp>=time);
@@ -28,6 +27,7 @@ contract CryptoColors is Token{
         colors[colorsCount].color = _color;
         colors[colorsCount].owner = msg.sender;
         colorsCount++;
+        time=block.timestamp+900;
     }
     //Function that allows anyone who has colors to sell them (push them to the market)
     function sellColor(uint _id, uint _price) public {
@@ -61,7 +61,5 @@ contract CryptoColors is Token{
     Token(_name, _symbol, _decimals, _totalSupply) public {
         mainPerson=msg.sender;
         addColor("Red", 100000000000000000);
-        addColor("Green", 100000000000000000);
-        addColor("Blue", 100000000000000000);
     }
 }

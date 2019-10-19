@@ -9,16 +9,15 @@ import {
 import BuyColors from "./ColorsComponents/BuyColors";
 import SellColors from "./ColorsComponents/SellColors";
 import AddColor from "./ColorsComponents/AddColor";
-
+//Colors part of the website
 class YourTokens extends React.Component {
-
     render() {
         return (
             <Router>
                 <div>
                     <div className="jumbotron container mb-0">
-                        <h1 className="display-4 ">Hi {this.props.account}! Time to new color: {this.props.time}</h1><h1 className="display-5"> <br />Your ballance is {this.props.balance} STE</h1>
-                        <p className="lead font-weight-bolder">There you can safely buy,send and do anything you want with your local tokens</p>
+                        <h1 className="display-4 ">Hi {this.props.account}! Time to new color: <span className="text-danger">{this.props.time}</span></h1><h1 className="display-5"> <br />Your ballance is {this.props.balance} STE</h1>
+                        <p className="lead font-weight-bolder">There you can safely buy, send and do anything you want with your local tokens</p>
                         <hr className="my-4" />
                     </div>
                     <div className="container">
@@ -34,7 +33,7 @@ class YourTokens extends React.Component {
                                 ?<Link to="/AddColor" className="col d-inline-block bg-danger text-white rounded m-1 text-center">
                                         <h1 className="mt-2">Add Colors</h1>
                                     </Link>
-                                    : <p />
+                                : <p />
                                 }
                             </>
                         </div>

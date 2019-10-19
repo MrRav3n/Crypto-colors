@@ -1,5 +1,5 @@
 import React from 'react'
-
+//Transfering tokens from our account
 class TransferTokens extends React.Component {
     render() {
         return(
@@ -21,4 +21,5 @@ class TransferTokens extends React.Component {
         );
     }
 }
+
 export default TransferTokens

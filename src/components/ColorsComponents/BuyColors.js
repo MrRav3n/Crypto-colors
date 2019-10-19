@@ -3,7 +3,7 @@ import React from 'react'
 class BuyColors extends React.Component {
 
     constructor(props){
-        super(props)
+        super(props);
         this.state = {
             bought: []
         }
@@ -22,24 +22,21 @@ class BuyColors extends React.Component {
                             background: item.color,
                         };
                         let price = item.price / 1000000000000000000;
-                        price = price.toString()
-                        console.log(i)
-                        return (
-                            <div className="col-3">
-                                {item.bought
-                                    ? <p />
-                                    :<div key={i} className="rounded-circle row w-100 color  align-items-center justify-content-center" style={styleObj} onClick={(e) => {
+                        price = price.toString();
+                        if(item.bought===false) {
+                            return (
+                                <div className="col-lg-4 col-md-6 col-12 rounded color mb-3">
+                                    <div key={i} className="rounded row m-1  align-items-center justify-content-center" style={styleObj} onClick={(e) => {
                                         this.props.buyColor(i)
-                                    }}><h1>{price} STE</h1></div>}
-                            </div>
-                        );
+                                    }}><h1 className="text-center">{price} STE</h1></div>
+                                </div>
+                            );
+                        }
                     })}
                 </div>
-
             </div>
         );
     }
 }
-
 
 export default BuyColors

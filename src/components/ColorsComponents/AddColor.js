@@ -10,9 +10,8 @@ class AddColor extends React.Component {
                 <form className="form-inline row justify-content-center p-2 rounded" onSubmit={(e) => {
                     e.preventDefault();
                     let value = this.price.value*1000000000000000000;
-                    value = value.toString()
+                    value = value.toString();
                     this.props.addColor(this.costam.value, value);
-
                 }}>
                     <input name="Color Picker" className="form-control col-12 col-sm-5 mr-sm-3 mb-2 mb-sm-0" ref={(input) => this.costam = input} type="color"/>
                     <input type="text" ref={(input) => this.price = input} className="form-control col-12 col-sm-3 mb-2 mb-sm-0" placeholder="Price" />

@@ -5,20 +5,19 @@ import {
     Route,
     Link
 } from "react-router-dom";
-
 import GiveAlowance from "./TokenComponents/GiveAlowance";
 import BuyTokens from "./TokenComponents/BuyTokens";
 import TransferTokens from "./TokenComponents/TransferTokens";
 import TransferFromTokens from "./TokenComponents/TransferFromTokens";
+//Tokens part of the website
 class YourTokens extends React.Component {
-
     render() {
         return (
             <Router>
             <div>
                 <div className="jumbotron container mb-0">
                     <h1 className="display-4 ">Hi {this.props.account}!</h1><h1 className="display-5"> <br />Your ballance is {this.props.balance} STE </h1>
-                    <p className="lead font-weight-bolder">There you can safely buy,send and do anything you want with your local tokens</p>
+                    <p className="lead font-weight-bolder">There you can safely buy, send and do anything you want with your local tokens</p>
                     <hr className="my-4" />
                 </div>
                     <div className="container">
