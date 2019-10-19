@@ -13,7 +13,7 @@ contract CryptoColors is Token{
     }
     mapping(address => uint) public peopleItemsCount; //Every person counter how much colors does he/she have
     mapping(uint => FreeColors) public colors;
-    address payable public mainPerson;  //contract deployer
+    //contract deployer
     //Someone who wants to collect our colors
 
     mapping(address => uint[]) public people;
@@ -59,7 +59,6 @@ contract CryptoColors is Token{
         uint8 _decimals,
         uint _totalSupply)
     Token(_name, _symbol, _decimals, _totalSupply) public {
-        mainPerson=msg.sender;
         addColor("Red", 100000000000000000);
     }
 }

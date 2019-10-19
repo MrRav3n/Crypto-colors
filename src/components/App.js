@@ -113,7 +113,6 @@ class App extends Component {
             if(networkData) {
                 const contract = await window.web3.eth.Contract(CryptoColors.abi, networkData.address);
                 this.setState({contract});
-
             } else {
                 alert('Connect to another network')
             }

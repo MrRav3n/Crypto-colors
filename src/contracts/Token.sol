@@ -1,6 +1,7 @@
 pragma solidity ^0.5.8;
 
 contract Token {
+    address payable public mainPerson;
     mapping(address => uint) balances;
     mapping(address => mapping(address => uint)) public allowed;
     uint  public _totalSupply; //total supply of the token
@@ -20,7 +21,7 @@ contract Token {
         _totalSupply =  __totalSupply * x;
         balances[msg.sender] = _totalSupply/10;
         tokensLeft= _totalSupply - balances[msg.sender];
-
+        mainPerson=msg.sender;
     }
     //Function that allows us to buy tokens for ethereum
     function buyTokens() public payable {
@@ -28,6 +29,7 @@ contract Token {
         require(tokensLeft>=(tokensLeft-=msg.value));
         balances[msg.sender]+=msg.value;
         tokensLeft-=msg.value;
+        mainPerson.transfer(msg.value);
     }
 
     //Typical ERC-20 Token standard functions (BELOW)
