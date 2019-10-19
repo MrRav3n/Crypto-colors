@@ -23,12 +23,13 @@ class BuyColors extends React.Component {
                         };
                         let price = item.price / 1000000000000000000;
                         price = price.toString()
+                        console.log(i)
                         return (
                             <div className="col-3">
                                 {item.bought
                                     ? <p />
                                     :<div key={i} className="rounded-circle row w-100 color  align-items-center justify-content-center" style={styleObj} onClick={(e) => {
-                                        this.props.buyColor(i+1)
+                                        this.props.buyColor(i)
                                     }}><h1>{price} STE</h1></div>}
                             </div>
                         );

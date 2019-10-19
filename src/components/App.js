@@ -70,14 +70,14 @@ class App extends Component {
             colors: [],
             person: [],
             numberTest: 0,
-            personColors: []
+            personColors: [],
 
         });
         let peopleItemsCount=await this.state.contract.methods.peopleItemsCount(this.state.account).call();
         peopleItemsCount=peopleItemsCount.toNumber();
+        this.setState({peopleItemsCount});
 
-
-        for(let i=1; i<=this.state.colorsCount; i++) {
+        for(let i=0; i<this.state.colorsCount; i++) {
             let item = await this.state.contract.methods.colors(i).call();
                 this.setState({colors : [...this.state.colors, item]})
 
@@ -86,25 +86,28 @@ class App extends Component {
 
 
         for(let z=0; z<peopleItemsCount;z++) {
-
             let person = await this.state.contract.methods.people(this.state.account, z).call();
             person = person.toNumber()
             console.log(person)
-            console.log(this.state.colors[2])
-            if(person!=0) {
-                if(this.state.colors[person-1].owner===this.state.account) {
-                    this.setState({ personColors : [...this.state.personColors, this.state.colors[person-1]]})
-                    console.log(this.state.colors[person-1].color)
-                }
-            }
-
-
-
+            this.setState({ person : [...this.state.person, person]})
+            this.setState({ personColors : [...this.state.personColors, this.state.colors[person]]})
         }
-        console.log(this.state.personColors);
 
 
 
+
+    }
+
+
+    async sellColor(id,price) {
+        console.log(this.state.personColors[id].owner)
+        console.log(this.state.personColors[id].color)
+        console.log(id)
+        await this.state.contract.methods.sellColor(id,price).send({from: this.state.account}, (error, result) => {
+            if(result!=null){
+                this.checkBlockNumber();
+            }
+        });
     }
     async loadContract() {
         const networkId = await window.web3.eth.net.getId();
@@ -152,14 +155,9 @@ class App extends Component {
             }
         });
     }
-    async sellColor(id,price) {
-        await this.state.contract.methods.sellColor(id,price).send({from: this.state.account}, (error, result) => {
-            if(result!=null){
-                this.checkBlockNumber();
-            }
-        });
-    }
+
     async buyColor(id) {
+
         await this.state.contract.methods.buyColor(id).send({from: this.state.account}, (error, result) => {
             if(result!=null){
                 this.checkBlockNumber();
@@ -231,6 +229,7 @@ class App extends Component {
                           </Route>
                           <Route exact path="/YourColors" >
                           <YourColors  account={this.state.accountShort}
+                                       accountLong={this.state.account}
                                        mainAccount={this.state.mainAccount}
                                        balance={this.state.balance}
                                        addColor={this.addColor.bind(this)}
@@ -240,6 +239,8 @@ class App extends Component {
                                        sellColor={this.sellColor.bind(this)}
                                        personColors={this.state.personColors}
                                        numberItems={this.state.numberTest}
+                                       peopleItemsCount={this.state.peopleItemsCount}
+                                       person={this.state.person}
                           />
                           </Route>
                           <Route path="/" component={MyDefaultComponent} />

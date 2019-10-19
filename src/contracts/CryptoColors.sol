@@ -19,7 +19,7 @@ contract CryptoColors is Token{
     mapping(address => uint[]) public people;
     //Function that allows main person to add new color to website (it can be done once a specified amount of time)
     function addColor(string memory _color, uint _price) public {
-        colorsCount++;
+
         require(bytes(_color).length>0);
         require(_price>0);
         require(block.timestamp>=time);
@@ -27,27 +27,27 @@ contract CryptoColors is Token{
         colors[colorsCount].price = _price;
         colors[colorsCount].color = _color;
         colors[colorsCount].owner = msg.sender;
-
+        colorsCount++;
     }
     //Function that allows anyone who has colors to sell them (push them to the market)
     function sellColor(uint _id, uint _price) public {
         require(colors[people[msg.sender][_id]].owner == msg.sender);
         colors[people[msg.sender][_id]].price = _price;
         colors[people[msg.sender][_id]].bought = false;
-        delete people[msg.sender][_id];
+        people[msg.sender][_id] = 999;
     }
     //Function that allows anyone with a sufficient number of tokens to buy color (from the market)
     function buyColor(uint _id) public {
         require(colors[_id].owner != msg.sender);
-        require(_id<=colorsCount && _id>0);
+        require(_id<=colorsCount && _id>=0);
         require(!colors[_id].bought);
         require(balances[msg.sender]>=colors[_id].price);
-        peopleItemsCount[msg.sender]++;
+
         transfer(colors[_id].owner, colors[_id].price);
         people[msg.sender].push(_id);
         colors[_id].bought = true;
         colors[_id].owner = msg.sender;
-
+        peopleItemsCount[msg.sender]++;
     }
     //How much time left to new color add
     function getTime() public view returns(uint) {

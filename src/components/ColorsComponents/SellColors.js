@@ -13,23 +13,31 @@ class SellColors extends React.Component {
                 </div>
                 <div className="row mt-3">
                     {this.props.personColors.map((item, i) => {
-                        const styleObj = {
-                            background: item.color,
-                        };
-                        let price = item.price / 1000000000000000000;
+                        console.log(i)
+                        if(this.props.person[i] != 999) {
+                       if(this.props.colors[this.props.person[i]].owner===this.props.accountLong && item.bought === true ) {
+                           const styleObj = {
+                               background: item.color,
+                           };
+                           let price = item.price / 1000000000000000000;
 
-                        price = price.toString()
-                        return (
-                            <div className="col-3  mt-5">
+                           price = price.toString()
 
-                                <div key={i} className="rounded-circle row w-100 color  align-items-center justify-content-center" style={styleObj} onClick={(e) => {
-                                    let priceToSell = this.price.value*1000000000000000000;
-                                    priceToSell = priceToSell.toString()
-                                    console.log(priceToSell);
-                                    this.props.sellColor(i, priceToSell)
-                                }}><h1>{price} STE</h1></div>
-                            </div>
-                        );
+                           let person = this.props.person[i].toString()
+                            console.log(i)
+                           return (
+                               <div className="col-3  mt-5">
+
+                                   <div key={i} className="rounded-circle row w-100 color  align-items-center justify-content-center" style={styleObj} onClick={(e) => {
+
+                                       let priceToSell = this.price.value*1000000000000000000;
+                                       priceToSell = priceToSell.toString()
+                                       this.props.sellColor(i, priceToSell)
+                                   }}><h1>{price} STE</h1></div>
+                               </div>
+                           );
+                       }
+                        }
                     })}
                 </div>
             </div>

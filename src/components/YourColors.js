@@ -48,6 +48,10 @@ class YourTokens extends React.Component {
                         <Route exact path="/SellColors">
                             <SellColors sellColor={this.props.sellColor}
                                         personColors={this.props.personColors}
+                                        peopleItemsCount={this.props.peopleItemsCount}
+                                        person={this.props.person}
+                                        colors={this.props.colors}
+                                        accountLong={this.props.accountLong}
                             />
                         </Route>
                        <Route exact path="/AddColor">
