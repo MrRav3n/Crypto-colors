@@ -1,7 +1,7 @@
 {
   "main.css": "/Crypto-colors/static/css/main.e662fedd.chunk.css",
-  "main.js": "/Crypto-colors/static/js/main.17ddfcf7.chunk.js",
-  "main.js.map": "/Crypto-colors/static/js/main.17ddfcf7.chunk.js.map",
+  "main.js": "/Crypto-colors/static/js/main.f5980a35.chunk.js",
+  "main.js.map": "/Crypto-colors/static/js/main.f5980a35.chunk.js.map",
   "static/css/1.baff7280.chunk.css": "/Crypto-colors/static/css/1.baff7280.chunk.css",
   "static/js/1.04f493a3.chunk.js": "/Crypto-colors/static/js/1.04f493a3.chunk.js",
   "static/js/1.04f493a3.chunk.js.map": "/Crypto-colors/static/js/1.04f493a3.chunk.js.map",
@@ -10,6 +10,6 @@
   "static/css/1.baff7280.chunk.css.map": "/Crypto-colors/static/css/1.baff7280.chunk.css.map",
   "static/css/main.e662fedd.chunk.css.map": "/Crypto-colors/static/css/main.e662fedd.chunk.css.map",
   "index.html": "/Crypto-colors/index.html",
-  "precache-manifest.8a203dcf29d81ac764e067e24871f6fd.js": "/Crypto-colors/precache-manifest.8a203dcf29d81ac764e067e24871f6fd.js",
+  "precache-manifest.4322883e2aa54363cc58e14897f0fe45.js": "/Crypto-colors/precache-manifest.4322883e2aa54363cc58e14897f0fe45.js",
   "service-worker.js": "/Crypto-colors/service-worker.js"
 }
