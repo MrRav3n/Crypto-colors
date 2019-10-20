@@ -6,7 +6,7 @@ class SellColors extends React.Component {
             <div className="jumbotron container">
                 <h1 className="display-4 text-center font-weight-bolder">Sell Your Colors</h1>
                 <p className="lead font-weight-bolder text-center">Now you are able to sell colors that you own.</p>
-                <p className="lead font-weight-bolder text-center"><span className="text-danger display-3">Type below the price and then click on item you want to sell.</span></p>
+                <p className="lead font-weight-bolder text-center"><span className="text-danger display-4">Type below the price and then click on item you want to sell.</span></p>
                 <hr className="my-4"/>
                 <div className="form-inline row justify-content-center p-2 rounded">
                     <input type="text" ref={(input) => this.price = input} className="form-control col-12 col-sm-5 mr-sm-3 mb-2 mb-sm-0" placeholder="Price" />
